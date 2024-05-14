@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742761628875",
+    "project_id": "fir-messaging-ed5bf",
+    "storage_bucket": "fir-messaging-ed5bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742761628875:android:3ec5a59a597e2bf9e1474e",
+        "android_client_info": {
+          "package_name": "com.example.messaging_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4w2Nqao_xWRh6MT2gxP8XmsOcRIIO97o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
