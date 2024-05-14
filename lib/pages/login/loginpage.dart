@@ -1,8 +1,13 @@
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:messaging_app/pages/components/custom_button.dart';
 import 'package:messaging_app/pages/components/custom_textformfield.dart';
 import 'package:messaging_app/pages/login/forgot_password_page/forgot_password.dart';
 import 'package:messaging_app/pages/ragister/ragisterpage.dart';
+import 'package:messaging_app/service/firebase_auth/authentication_check.dart';
 import 'package:messaging_app/service/firebase_auth/authentication_service.dart';
 
 //login page
@@ -24,11 +29,17 @@ class _LoginPageState extends State<LoginPage> {
   //form global state key
   final _key = GlobalKey<FormState>();
 
+  //object of google signin with email scope
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
   //signin user with email password
   void signIn() {
     try {
       AuthenticationService()
-          .signInUser(_emailController.text, _passwordController.text);
+          .signInUser(_emailController.text, _passwordController.text)
+          .whenComplete(
+            () => goToAuth(),
+          );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -39,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   CustomButton(
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('This Feature Added Soon!'),
-                        ),
-                      );
+                      AuthenticationService().googleSignin(context).whenComplete(() => goToAuth());
                     },
                     buttonName: "GOOGLE",
                     iconData: Icons.mail,
@@ -150,10 +158,11 @@ class _LoginPageState extends State<LoginPage> {
                       TextButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RagisterPage(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const RagisterPage(),
+                            ),
+                          );
                         },
                         child: Text(
                           "Don't have an account Click Hear!",
@@ -169,6 +178,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  goToAuth() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthCheck(),
       ),
     );
   }

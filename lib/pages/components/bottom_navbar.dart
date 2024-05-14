@@ -16,12 +16,22 @@ class CustomBottomNavBar extends StatelessWidget {
         onTap: onTap,
         selectedItemColor: screenPickerColor,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "H O M E"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "P R O F I L E"),
+            icon: Icon(Icons.home),
+            label: "H O M E",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.color_lens), label: "T H E M E"),
-          BottomNavigationBarItem(icon: Icon(Icons.messenger),label: 'M E S S A G E'),
+            icon: Icon(Icons.person),
+            label: "P R O F I L E",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.color_lens),
+            label: "T H E M E",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.messenger),
+            label: 'M E S S A G E',
+          ),
         ]);
   }
 }

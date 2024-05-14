@@ -22,7 +22,7 @@ class _HomepageState extends State<Homepage> {
     const UserListPage(),
     const ProfilePage(),
     const ThemePage(),
-    const MessageHttp(),
+     MessageHttp(showAppBar: false,),
   ];
 
   int currentIndex = 0;

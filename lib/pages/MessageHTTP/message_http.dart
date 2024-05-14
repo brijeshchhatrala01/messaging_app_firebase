@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,20 +8,16 @@ import 'package:http/http.dart' as http;
 import '../components/custom_textformfield.dart';
 import '../homepage/bottom_navigation_pages/theme_page.dart';
 
-class MessageHttp extends StatefulWidget {
-  const MessageHttp({super.key});
+class MessageHttp extends StatelessWidget {
+  bool showAppBar;
+  MessageHttp({super.key,required this.showAppBar});
 
-  @override
-  State<MessageHttp> createState() => _MessageHttpState();
-}
-
-class _MessageHttpState extends State<MessageHttp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: showAppBar ? AppBar(
         title: const Text('M E S S A G I N G  A P P'),
-      ),
+      ) : null,
       body: Column(
         children: [
           FutureBuilder<List<dynamic>>(
@@ -57,21 +55,21 @@ class _MessageHttpState extends State<MessageHttp> {
 }
 
 Widget _buildMessageInput() {
-  var _messageController = TextEditingController();
+  var messageController = TextEditingController();
   return Padding(
     padding: const EdgeInsets.all(12.0),
     child: Row(
       children: [
         Expanded(
             child: CustomTextFormField(
-          controller: _messageController,
+          controller: messageController,
           keyboardType: TextInputType.text,
           isHideText: false,
           hintText: "Enter Message",
           prefixIcon: Icons.message_outlined,
           suffixIcon: Icons.send,
           onIconPressed: () {
-            if (_messageController.text.isNotEmpty) {
+            if (messageController.text.isNotEmpty) {
               //sendMessage();
             }
           },

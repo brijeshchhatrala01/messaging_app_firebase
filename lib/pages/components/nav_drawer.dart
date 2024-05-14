@@ -23,7 +23,9 @@ class CustomNavigationDrawer extends StatelessWidget {
     void goToMessageHTTP() => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MessageHttp(),
+            builder: (context) => MessageHttp(
+              showAppBar: true,
+            ),
           ),
         );
 

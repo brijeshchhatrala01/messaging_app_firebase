@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService {
   //instance of firebaseauth
@@ -8,6 +10,7 @@ class AuthenticationService {
   //instance of firestore
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
   //signup a user
   Future<UserCredential> signUpUser(String email, String password) async {
     try {
@@ -29,6 +32,7 @@ class AuthenticationService {
 
   //logout
   Future<void> logoutUser() async {
+    googleSignIn.signOut();
     return _firebaseAuth.signOut();
   }
 
@@ -55,6 +59,43 @@ class AuthenticationService {
       return _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
+    }
+  }
+
+  //signin with google
+  Future<void> googleSignin(BuildContext context) async {
+    try {
+      GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        if (googleSignInAuthentication.accessToken != null) {
+          AuthCredential authCredential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuthentication.accessToken,
+            idToken: googleSignInAuthentication.idToken,
+          );
+          UserCredential userCredential =
+              await FirebaseAuth.instance.signInWithCredential(authCredential);
+          User user = userCredential.user!;
+          //add user collection in database
+          _firebaseFirestore
+              .collection('users')
+              .doc(userCredential.user!.uid)
+              .set(
+            {
+              'uid': userCredential.user!.uid,
+              'email': userCredential.user!.email,
+            },
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
     }
   }
 }
